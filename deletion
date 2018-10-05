@@ -1,0 +1,151 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct Nodetype
+{
+	int data;
+	struct Nodetype* left;
+	struct Nodetype* right;
+}Node;
+
+Node* getNode(int n)
+{
+	Node* ptr=(Node*)malloc(sizeof(Node));
+	ptr->data=n;
+	ptr->right=NULL;
+	ptr->left=NULL;
+	return ptr;
+}
+
+
+void insert(Node** root,int n)
+{
+	//Node* q= *root;
+	if(*root == NULL){
+		Node* temp=getNode(n);
+		*root=temp;
+	}
+	else if((*root)->data<n)
+		insert(&(*root)->right,n);
+	else
+		insert(&(*root)->left,n);
+}
+
+void inorder(Node* root)
+{
+	if(root==NULL)
+		return;
+	inorder(root->left);
+	printf("%d  ",root->data);
+	inorder(root->right);
+}
+
+void preorder(Node* root)
+{
+	if(root==NULL)
+		return;
+	printf("%d  ",root->data);
+	preorder(root->left);
+	preorder(root->right);
+}
+
+void postorder(Node* root)
+{
+	if(root==NULL)
+		return;
+	postorder(root->left);
+	postorder(root->right);
+	printf("%d  ",root->data);
+}
+
+void delete(Node** root,int n)
+{
+	//Node* q=*root;
+	if(*root==NULL){
+		printf("\nNode not found\n");
+		return;
+	}
+	else if(n>(*root)->data)
+		delete(&(*root)->right,n);
+	else if(n<(*root)->data)
+		delete(&(*root)->left,n);
+	else
+		{
+		 if((*root)->left==NULL)
+		{
+			Node* temp=*root;
+			printf("\n%d  ",temp->data);
+			*root=(*root)->right;
+			free(temp);
+		}
+		else if((*root)->right==NULL)
+		{
+			Node* temp=*root;
+			printf("\n%d  ",temp->data);
+			*root=(*root)->left;
+			free(temp);
+		}
+		else
+		{
+		    Node* p=*root;
+		    printf("\n%d  ",p->data);
+		    Node* q=p;
+		    p=p->right;
+		    while(!p->left){
+                q=p;
+                p=p->left;
+		    }
+            (*root)->data=p->data;
+            if(q->right==NULL){
+                q->left=p->right;
+                free(p);
+            }
+            else{
+                q->right=p->right;
+                free(p);
+
+		}
+		}
+
+}
+}
+
+
+int main()
+{
+    Node* root=NULL;
+    int i,n,d;
+    while(1)
+    {
+        printf("\nEnter 1 to insert 2 to display 3 to delete 4 to exit\n");
+        scanf("%d",&i);
+        switch(i)
+        {
+        case 1:
+            printf("\nEnter the no to insert\n");
+            scanf("%d",&n);
+            insert(&root,n);
+            break;
+        case 2:
+            inorder(root);
+            printf("\n");
+            preorder(root);
+            printf("\n");
+            postorder(root);
+            break;
+        case 3:
+            printf("\nEnter the value to delete\n");;
+            scanf("%d",&d);
+            delete(&root,d);
+            break;
+        case 4:
+            exit(1);
+        default:
+            printf("\nWrong Choice\n");
+
+
+        }
+    }
+
+}
