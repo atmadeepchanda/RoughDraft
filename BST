@@ -92,16 +92,16 @@ void delete(Node** root,int n)
 		    printf("\n%d  ",p->data);
 		    Node* q=p;
 		    p=p->right;
-		    while(!p->left){
+		    while(p->left){
                 q=p;
                 p=p->left;
 		    }
             (*root)->data=p->data;
-            if(q->right==NULL){
+            if(q->left!=NULL){
                 q->left=p->right;
                 free(p);
             }
-            else{
+            else if((q->right!=NULL)&&(q->left==NULL)){
                 q->right=p->right;
                 free(p);
 
