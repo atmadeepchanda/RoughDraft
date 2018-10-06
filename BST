@@ -102,6 +102,7 @@ void delete(Node** root,int n)
             q->right=p->right;
         else
             q->left=p->right;
+		free(p);
 		}
 
 }
