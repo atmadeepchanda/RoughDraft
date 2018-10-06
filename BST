@@ -97,15 +97,11 @@ void delete(Node** root,int n)
                 p=p->left;
 		    }
             (*root)->data=p->data;
-            if(q->left!=NULL){
-                q->left=p->right;
-                free(p);
-            }
-            else if((q->right!=NULL)&&(q->left==NULL)){
-                q->right=p->right;
-                free(p);
 
-		}
+		if(q->right==p)
+            q->right=p->right;
+        else
+            q->left=p->right;
 		}
 
 }
