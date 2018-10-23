@@ -1,0 +1,265 @@
+BST traversals Non Recursive using user defined stack
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct TNodetype
+{
+	int data;
+	struct TNodetype* left;
+	struct TNodetype* right;
+}TNode;
+
+TNode* getTNode(int n)
+{
+	TNode* ptr=(TNode*)malloc(sizeof(TNode));
+	ptr->data=n;
+	ptr->right=NULL;
+	ptr->left=NULL;
+	return ptr;
+}
+
+
+
+
+
+typedef struct Nodetype
+{
+    struct Nodetype* next;
+    TNode* info;
+}Node;
+
+
+
+Node* getNode(TNode* n)
+{
+    Node* ptr=(Node*)malloc(sizeof(Node));
+    ptr->info=n;
+    ptr->next=NULL;
+    return ptr;
+}
+void push(Node** head,TNode* n)
+{
+    Node* ptr=(Node*)malloc(sizeof(Node));
+    ptr=getNode(n);
+    if(*head==NULL)
+        *head=ptr;
+
+
+    else
+    {
+        ptr->next=*head;
+        *head=ptr;
+    }
+}
+
+TNode* pop(Node** head)
+{
+    if(*head==NULL)
+        printf("\nEmpty list\n");
+    else
+    {
+        Node* p=*head;
+        TNode* q=(*head)->info;
+        p=p->next;
+        free(*head);
+        (*head)=p;
+        return q;
+    }
+
+}
+
+void insert(TNode** root,int n)
+{
+	//Node* q= *root;
+	if(*root == NULL){
+		TNode* temp=getTNode(n);
+		*root=temp;
+	}
+	else if((*root)->data<n)
+		insert(&(*root)->right,n);
+	else
+		insert(&(*root)->left,n);
+}
+
+void delete(TNode** root,int n)
+{
+	//Node* q=*root;
+	if(*root==NULL){
+		printf("\nNode not found\n");
+		return;
+	}
+	else if(n>(*root)->data)
+		delete(&(*root)->right,n);
+	else if(n<(*root)->data)
+		delete(&(*root)->left,n);
+	else
+		{
+		 if((*root)->left==NULL)
+		{
+			TNode* temp=*root;
+			printf("\n%d  ",temp->data);
+			*root=(*root)->right;
+			free(temp);
+		}
+		else if((*root)->right==NULL)
+		{
+			TNode* temp=*root;
+			printf("\n%d  ",temp->data);
+			*root=(*root)->left;
+			free(temp);
+		}
+		else
+		{
+		    TNode* p=*root;
+		    printf("\n%d  ",p->data);
+		    TNode* q=p;
+		    p=p->right;
+		    while(p->left){
+                q=p;
+                p=p->left;
+		    }
+            (*root)->data=p->data;
+
+		if(q->right==p)
+            q->right=p->right;
+        else
+            q->left=p->right;
+		free(p);
+		}
+
+}
+}
+
+void inorder(TNode* root,Node** head)
+{
+    if(root==NULL)
+        return;
+    TNode* p=root;
+    push(head,p);
+    while(*head)
+    {
+        while(p && p->left)
+        {
+            p=p->left;
+            push(head,p);
+        }
+        p=pop(head);
+        printf("%d  ",p->data);
+        if(p->right)
+            push(head,p->right);
+        p=p->right;
+    }
+}
+
+void preorder(TNode* root,Node** head)
+{
+    if(root==NULL)
+        return;
+    TNode* p=root;
+    push(head,p->right);
+    while(*head)
+    {
+        while(p)
+        {
+            printf("%d  ",p->data);
+            p=p->left;
+            if(p)
+                push(head,p->right);
+        }
+            while((*head) && (*head)->info==NULL)
+                p=pop(head);
+            if(*head)
+            {
+                p=pop(head);
+                push(head,p->right);
+            }
+
+    }
+}
+
+void postorder(TNode* root,Node** head)
+{
+    if(root==NULL)
+        return;
+    TNode* p=root;
+    push(head,p);
+    while(*head)
+    {
+        while(p && p->left)
+        {
+            p=p->left;
+            push(head,p);
+        }
+        if(p)
+            p=p->right;
+        if(p)
+            push(head,p);
+        else
+        {
+            p=pop(head);
+            printf("%d  ",p->data);
+            while(*head && p==((*head)->info)->right)
+            {
+
+                    p=pop(head);
+                    printf("%d  ",p->data);
+
+            }
+
+
+            if(*head)
+            {
+
+                p=((*head)->info)->right;
+            }
+            if(p && p!=root)
+                push(head,p);
+
+        }
+    }
+}
+int main()
+{
+    TNode* root=NULL;
+    Node* head=NULL;
+    int i,n,d;
+    while(1)
+    {
+        printf("\nEnter 1 to insert 2 to display 3 to delete 4 to exit\n");
+        scanf("%d",&i);
+        switch(i)
+        {
+        case 1:
+            printf("\nEnter the no to insert\n");
+            scanf("%d",&n);
+            insert(&root,n);
+            break;
+        case 2:
+            inorder(root,&head);
+            printf("\n");
+            preorder(root,&head);
+            printf("\n");
+            postorder(root,&head);
+            break;
+        case 3:
+            printf("\nEnter the value to delete\n");;
+            scanf("%d",&d);
+            delete(&root,d);
+            break;
+        case 4:
+            exit(1);
+        default:
+            printf("\nWrong Choice\n");
+
+
+        }
+    }
+
+}
+
+
+
+
