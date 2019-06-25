@@ -1,0 +1,72 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int k=0;
+long c=0;
+long moneysaved;
+
+
+void mergeSort(int arr[], int l,int u)
+{
+
+    if(k==-1)
+        return;
+    if(l==u)
+    {
+        if(arr[l]<moneysaved)
+        {
+            c++;
+            moneysaved = moneysaved - arr[l];
+        }
+        else
+        {
+            k=-1;
+            return;
+        }
+    }
+
+    if(l<u)
+    {
+        int mid=(l+u)/2;
+        mergeSort(arr,l,mid);
+        mergeSort(arr,mid+1,u);
+
+    }
+}
+
+
+int main()
+{
+    int n,i,q;
+    //printf("\nEnter the no of shops\n");
+    scanf("%d",&n);
+    int* arr=(int*)malloc(n*sizeof(int));
+   // printf("\n");
+    //printf("\nEnter the prices in each shop\n");
+    for(i=0;i<n;i++)
+        scanf("%d",arr+i);
+    //printf("\nEnter the no of days she will visit the market\n");
+    //printf("\n");
+    scanf("%d",&q);
+    int* days = (int*)malloc(q*sizeof(int));
+
+    //printf("\n");
+    //printf("\nEnter the money saved after buying vegetables each day\n");
+    for(i=0;i<q;i++)
+        scanf("%d",&days[i]);
+
+
+    for(i=0;i<q;i++)
+    {
+        moneysaved = days[i];
+        mergeSort(arr,0,n-1);
+        printf("%ld %ld",c,moneysaved);
+        printf("\n");
+        c=0;
+        k=0;
+    }
+
+    return 0;
+
+}
+
