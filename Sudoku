@@ -1,0 +1,101 @@
+int flag=0;
+
+bool isPossible(int r,int c,int p,int board[][9])
+{
+    int i,j,row,col;
+    for(i=0;i<9;i++)
+    {
+        if(board[i][c]==p)
+            return false;
+    }
+    
+    for(i=0;i<9;i++)
+    {
+        if(board[r][i]==p)
+            return false;
+    }
+    
+    row=r-(r%3);
+    col=c-(c%3);
+    
+    for(i=row;i<row+3;i++)
+    {
+        for(j=col;j<col+3;j++)
+        {
+            if(board[row][col]==p)
+                return false;
+        }
+    }
+    
+    return true;
+    
+}
+
+
+
+void check(int r,int c,int board[][9])
+{
+    int p;
+    if(flag==1)
+            return;
+    if((r==8)&&(c==9))
+    {
+        flag=1;
+        return;
+    }
+        
+    
+    if((c==9)&&(r!=8)){
+        check(r+1,0,board);
+        if(flag==1)
+            return;
+    }
+        
+    if(board[r][c]==0)
+    {
+        for(p=1;p<=9;p++)
+        {
+            if(isPossible(r,c,p,board))
+            {
+                board[r][c]=p;
+                check(r,c+1,board);
+                board[r][c]=0;
+                //if((x==8)&&(y==9))
+                if(flag==1)   
+                return;
+            }
+            //if(p==9)
+              //  return;
+        
+            
+            
+        }
+        
+    }
+    
+    else{ 
+        check(r,c+1,board);
+    if(flag==1)
+            return;
+    }
+}
+    
+    
+
+
+bool sudokuSolver(int board[][9]){
+
+  /* Don't write main().
+   *  Don't read input, it is passed as function argument.
+   *  Don't print output and return output as specified in the question
+  */
+   
+    check(0,0,board);
+    
+    if(flag==1)  
+        return true;
+    else 
+        return false;
+
+
+}
