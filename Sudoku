@@ -2,7 +2,7 @@ int flag=0;
 
 bool isPossible(int r,int c,int p,int board[][9])
 {
-    int i,j,row,col;
+    int i,j,rows,cols;
     for(i=0;i<9;i++)
     {
         if(board[i][c]==p)
@@ -18,16 +18,26 @@ bool isPossible(int r,int c,int p,int board[][9])
     row=r-(r%3);
     col=c-(c%3);
     
-    for(i=row;i<row+3;i++)
+   /* for(i=row;i<row+3;i++)                                                      
     {
         for(j=col;j<col+3;j++)
         {
             if(board[row][col]==p)
                 return false;
         }
-    }
+    }*/
     
-    return true;
+   
+   rows=r-(r%3);
+    cols=c-(c%3);
+    
+    //New edit
+    for (int row = 0; row < 3; row++)  
+        for (int col = 0; col < 3; col++)  
+            if (board[row + rows] 
+                    [col + cols] == p)  
+                return false; 
+   return true;
     
 }
 
