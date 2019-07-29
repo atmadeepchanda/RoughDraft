@@ -1,0 +1,48 @@
+#include<iostream>
+using namespace std;
+
+void printArray(int* output,int j){
+    for(int i=0;i<j;i++){
+        cout<<output[i];
+    }
+    cout<<endl;
+
+}
+
+
+
+void findWays(int* input,int* output,int n,int currentSum,int i,int j,int targetSum){
+    if(currentSum==targetSum){
+        printArray(output,j);
+        return;
+    }
+
+    if((i==n)||(j==targetSum)){
+        return;
+    }
+
+    if(input[i]<=targetSum){
+        output[j]=input[i];
+        findWays(input,output,n,currentSum+input[i],i,j+1,targetSum);
+        //findWays(input,output,n,currentSum+input[i],i+1,j+1,targetSum);
+    }
+
+    findWays(input,output,n,currentSum,i+1,j,targetSum);
+}
+
+
+int main(){
+    int n,targetSum;
+    cin>>n;
+    int* input=new int[n];
+
+    for(int i=0;i<n;i++){
+        cin>>input[i];
+    }
+
+    cin>>targetSum;
+    int* output=new int[targetSum];
+    findWays(input,output,n,0,0,0,targetSum);
+
+
+}
